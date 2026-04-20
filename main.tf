@@ -4,25 +4,21 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git"
+  source = "../docker-host"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
-  dns_challenge_provider      = "route53"
-  dns_challenge_env = {
-    AWS_ACCESS_KEY_ID     = aws_iam_access_key.acme.id
-    AWS_SECRET_ACCESS_KEY = aws_iam_access_key.acme.secret
-    AWS_REGION            = "us-east-1"
-  }
+  dns_challenge_provider      = var.dns_challenge_provider
+  dns_challenge_env           = var.dns_challenge_env
   oidc_jwks_url               = var.oidc_jwks_url
   oidc_audience               = var.oidc_audience
   oidc_expected_subs          = join(",", var.oidc_expected_subs)
   ip_allowlist                = var.ip_allowlist
   docker_compose_runner_image = var.docker_compose_runner_image
   passwd_hash                 = bcrypt(random_password.dynamic_user.result)
-  registry_url                = scaleway_registry_namespace.default.endpoint
-  registry_username           = scaleway_iam_api_key.registry.access_key
-  registry_password           = scaleway_iam_api_key.registry.secret_key
+  registry_url                = var.registry_url
+  registry_username           = var.registry_username
+  registry_password           = var.registry_password
   block_device                = "/dev/sdb"
 }
 

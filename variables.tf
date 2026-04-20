@@ -45,7 +45,7 @@ variable "ssh_ip_range" {
 }
 
 variable "domain" {
-  description = "Base domain (e.g. dmc.miquido.dev). Wildcard cert will be issued for *.domain."
+  description = "Base domain for wildcard certificate and routing (e.g. dmc.miquido.dev)"
   type        = string
 }
 
@@ -54,9 +54,16 @@ variable "acme_email" {
   type        = string
 }
 
-variable "route53_zone_id" {
-  description = "Route53 hosted zone ID for the domain"
+variable "dns_challenge_provider" {
+  description = "Traefik ACME DNS challenge provider (e.g. route53, cloudflare)"
   type        = string
+  default     = "route53"
+}
+
+variable "dns_challenge_env" {
+  description = "Environment variables required by the DNS challenge provider"
+  type        = map(string)
+  sensitive   = true
 }
 
 variable "oidc_jwks_url" {
@@ -84,17 +91,18 @@ variable "docker_compose_runner_image" {
   default = "miquido/gitlab-docker-compose-host:172950-746ccb39"
 }
 
-variable "registry_oidc_provider_jwks_url" {
-  description = "OIDC provider JWKS URL for CI → Scaleway registry access (e.g. https://gitlab.example.com/.well-known/openid-configuration)"
+variable "registry_url" {
+  description = "Docker registry hostname to authenticate against"
   type        = string
 }
 
-variable "registry_oidc_audience" {
-  description = "OIDC audience for registry access"
+variable "registry_username" {
+  description = "Username for docker login"
   type        = string
 }
 
-variable "registry_oidc_sub" {
-  description = "OIDC subject pattern for registry access (e.g. project_path:myorg/*)"
+variable "registry_password" {
+  description = "Password for docker login"
   type        = string
+  sensitive   = true
 }

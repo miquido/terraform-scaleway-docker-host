@@ -3,17 +3,7 @@ output "public_ip" {
   value       = scaleway_instance_ip.public.address
 }
 
-output "domain" {
-  description = "Base domain"
-  value       = var.domain
-}
-
-output "registry_endpoint" {
-  description = "Scaleway container registry endpoint"
-  value       = scaleway_registry_namespace.default.endpoint
-}
-
-output "oidc_endpoint" {
-  description = "OIDC function endpoint for GitLab CI"
-  value       = module.oidc.oidc_endpoint
+output "block_volume_id" {
+  description = "Persistent data block volume ID"
+  value       = scaleway_block_volume.data.id
 }
