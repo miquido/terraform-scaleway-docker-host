@@ -106,3 +106,26 @@ variable "registry_password" {
   type        = string
   sensitive   = true
 }
+
+variable "walg_s3_endpoint" {
+  description = "WAL-G S3 endpoint URL. Empty = skip walg.env generation."
+  type        = string
+  default     = ""
+}
+
+variable "walg_s3_access_key_id" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
+variable "walg_s3_secret_access_key" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
+variable "walg_s3_region" {
+  type    = string
+  default = ""
+}

@@ -4,7 +4,7 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.0.3"
+  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.0.4"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
@@ -20,6 +20,11 @@ module "docker_host" {
   registry_username           = var.registry_username
   registry_password           = var.registry_password
   block_device                = "/dev/sdb"
+
+  walg_s3_endpoint          = var.walg_s3_endpoint
+  walg_s3_access_key_id     = var.walg_s3_access_key_id
+  walg_s3_secret_access_key = var.walg_s3_secret_access_key
+  walg_s3_region            = var.walg_s3_region
 }
 
 resource "scaleway_instance_security_group" "main" {
