@@ -4,7 +4,7 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.0.5"
+  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.1.0"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
@@ -20,11 +20,15 @@ module "docker_host" {
   registry_username           = var.registry_username
   registry_password           = var.registry_password
   block_device                = "/dev/sdb"
-
-  walg_s3_endpoint          = var.walg_s3_endpoint
-  walg_s3_access_key_id     = var.walg_s3_access_key_id
-  walg_s3_secret_access_key = var.walg_s3_secret_access_key
-  walg_s3_region            = var.walg_s3_region
+  walg_env_vars = {
+    AWS_ENDPOINT            = "https://s3.${var.region}.scw.cloud"
+    AWS_ACCESS_KEY_ID       = scaleway_iam_api_key.walg.access_key
+    AWS_SECRET_ACCESS_KEY   = scaleway_iam_api_key.walg.secret_key
+    AWS_REGION              = var.region
+    AWS_S3_FORCE_PATH_STYLE = "true"
+    WALG_COMPRESSION_METHOD = "lz4"
+    PGHOST                  = "/var/run/postgresql"
+  }
 }
 
 resource "scaleway_instance_security_group" "main" {
