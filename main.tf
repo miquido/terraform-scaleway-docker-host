@@ -4,7 +4,7 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.1.0"
+  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/1.2.0"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
@@ -20,6 +20,7 @@ module "docker_host" {
   registry_username           = var.registry_username
   registry_password           = var.registry_password
   block_device                = "/dev/sdb"
+  docker_prune_schedule       = var.docker_prune_schedule
   walg_env_vars = {
     AWS_ENDPOINT            = "https://s3.${var.region}.scw.cloud"
     AWS_ACCESS_KEY_ID       = scaleway_iam_api_key.walg.access_key

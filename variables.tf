@@ -107,6 +107,12 @@ variable "registry_password" {
   sensitive   = true
 }
 
+variable "docker_prune_schedule" {
+  description = "Cron schedule for Docker image pruning via Ofelia. Set to empty string to disable."
+  type        = string
+  default     = "0 3 * * *"
+}
+
 variable "walg_backup_retention_days" {
   description = "Number of days to retain WAL-G backups in Object Storage before automatic deletion."
   type        = number
