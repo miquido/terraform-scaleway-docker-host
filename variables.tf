@@ -113,8 +113,26 @@ variable "docker_prune_schedule" {
   default     = "0 3 * * *"
 }
 
+variable "enable_alloy" {
+  description = "Enable Grafana Alloy metrics collection to Scaleway Cockpit."
+  type        = bool
+  default     = true
+}
+
+variable "cockpit_metrics_retention_days" {
+  description = "Number of days to retain Traefik metrics in Scaleway Cockpit."
+  type        = number
+  default     = 30
+}
+
 variable "walg_backup_retention_days" {
   description = "Number of days to retain WAL-G backups in Object Storage before automatic deletion."
   type        = number
   default     = 30
+}
+
+variable "ssh_public_keys" {
+  description = "List of SSH public keys added to the dynamic user's authorized_keys on the VM."
+  type        = list(string)
+  default     = []
 }
