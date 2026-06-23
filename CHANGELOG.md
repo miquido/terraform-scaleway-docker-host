@@ -1,3 +1,10 @@
+## [1.0.1](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.0.0...v1.0.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* remove explicit gitlabUrl from releaserc to fix asset link URL ([71cd824](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/71cd824e6c7e4d2495570390aa871acf317013e1))
+
 # 1.0.0 (2026-06-23)
 
 
