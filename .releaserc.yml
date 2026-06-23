@@ -7,8 +7,7 @@ plugins:
   - - "@semantic-release/changelog"
     - changelogFile: CHANGELOG.md
   - - "@semantic-release/gitlab"
-    - gitlabUrl: ${CI_SERVER_URL}
-      assets:
+    - assets:
         - path: CHANGELOG.md
           label: Changelog
   - - "@semantic-release/git"
