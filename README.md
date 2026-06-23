@@ -61,7 +61,7 @@ module "docker_host" {
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/1.2.1 |
+| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/1.3.0 |
 
 ## Resources
 

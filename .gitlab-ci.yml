@@ -2,6 +2,22 @@ stages:
   - test
   - release
 
+validate-terraform:
+  stage: test
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint: [""]
+  script:
+    - terraform fmt -check -recursive
+    - terraform init -backend=false
+    - terraform validate
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - docker
+    - miquido
+
 validate-readme:
   stage: test
   image: alpine:3.20
