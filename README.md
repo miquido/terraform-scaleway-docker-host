@@ -54,14 +54,14 @@ module "docker_host" {
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
-| <a name="provider_scaleway"></a> [scaleway](#provider\_scaleway) | ~> 2.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.9.0 |
+| <a name="provider_scaleway"></a> [scaleway](#provider\_scaleway) | 2.76.0 |
 
 ## Modules
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/1.3.0 |
+| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/v1.0.0 |
 
 ## Resources
 
