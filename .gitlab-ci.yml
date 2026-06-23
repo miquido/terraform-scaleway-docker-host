@@ -38,6 +38,7 @@ release:
   stage: release
   image: node:22-alpine
   before_script:
+    - apk add --no-cache git
     - npm install -g semantic-release @semantic-release/changelog @semantic-release/gitlab @semantic-release/git
   script:
     - npx semantic-release
