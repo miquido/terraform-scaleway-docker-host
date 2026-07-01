@@ -1,3 +1,10 @@
+# [1.1.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.0.2...v1.1.0) (2026-07-01)
+
+
+### Features
+
+* update docker_compose_runner_image ([048a760](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/048a760578fc87cb0eede5d97f352b21213e4676))
+
 ## [1.0.2](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.0.1...v1.0.2) (2026-06-23)
 
 
