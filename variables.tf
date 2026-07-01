@@ -88,7 +88,7 @@ variable "ip_allowlist" {
 
 variable "docker_compose_runner_image" {
   type    = string
-  default = "miquido/gitlab-docker-compose-host:172950-746ccb39"
+  default = "ghcr.io/miquido/gitlab-docker-compose-host:v1.0.2"
 }
 
 variable "registry_url" {
