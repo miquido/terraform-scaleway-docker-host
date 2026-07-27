@@ -1,3 +1,10 @@
+# [1.2.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.1.0...v1.2.0) (2026-07-27)
+
+
+### Features
+
+* logs + static pages basic auth ([1e88fd7](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/1e88fd71b86fe1e8976d76d83bba9dc0fd6eb72a))
+
 # [1.1.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.0.2...v1.1.0) (2026-07-01)
 
 
