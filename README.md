@@ -61,7 +61,7 @@ module "docker_host" {
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/v1.0.0 |
+| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | tags/v1.1.0 |
 
 ## Resources
 
@@ -69,6 +69,7 @@ module "docker_host" {
 | ---- | ---- |
 | [random_password.dynamic_user](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [scaleway_block_volume.data](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/block_volume) | resource |
+| [scaleway_cockpit_source.logs](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/cockpit_source) | resource |
 | [scaleway_cockpit_source.metrics](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/cockpit_source) | resource |
 | [scaleway_cockpit_token.alloy](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/cockpit_token) | resource |
 | [scaleway_iam_api_key.walg](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/iam_api_key) | resource |
@@ -84,12 +85,13 @@ module "docker_host" {
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_acme_email"></a> [acme\_email](#input\_acme\_email) | Email for Let's Encrypt ACME registration | `string` | n/a | yes |
+| <a name="input_cockpit_logs_retention_days"></a> [cockpit\_logs\_retention\_days](#input\_cockpit\_logs\_retention\_days) | Number of days to retain Docker container logs in Scaleway Cockpit. | `number` | `30` | no |
 | <a name="input_cockpit_metrics_retention_days"></a> [cockpit\_metrics\_retention\_days](#input\_cockpit\_metrics\_retention\_days) | Number of days to retain Traefik metrics in Scaleway Cockpit. | `number` | `30` | no |
 | <a name="input_data_volume_iops"></a> [data\_volume\_iops](#input\_data\_volume\_iops) | n/a | `number` | `5000` | no |
 | <a name="input_data_volume_size_in_gb"></a> [data\_volume\_size\_in\_gb](#input\_data\_volume\_size\_in\_gb) | n/a | `number` | `20` | no |
 | <a name="input_dns_challenge_env"></a> [dns\_challenge\_env](#input\_dns\_challenge\_env) | Environment variables required by the DNS challenge provider | `map(string)` | n/a | yes |
 | <a name="input_dns_challenge_provider"></a> [dns\_challenge\_provider](#input\_dns\_challenge\_provider) | Traefik ACME DNS challenge provider (e.g. route53, cloudflare) | `string` | `"route53"` | no |
-| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.0.2"` | no |
+| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.1.1"` | no |
 | <a name="input_docker_prune_schedule"></a> [docker\_prune\_schedule](#input\_docker\_prune\_schedule) | Cron schedule for Docker image pruning via Ofelia. Set to empty string to disable. | `string` | `"0 3 * * *"` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | Base domain for wildcard certificate and routing (e.g. dmc.miquido.dev) | `string` | n/a | yes |
 | <a name="input_enable_alloy"></a> [enable\_alloy](#input\_enable\_alloy) | Enable Grafana Alloy metrics collection to Scaleway Cockpit. | `bool` | `true` | no |

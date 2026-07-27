@@ -4,7 +4,7 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/v1.0.0"
+  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=tags/v1.1.0"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
@@ -24,6 +24,8 @@ module "docker_host" {
   ssh_public_keys             = var.ssh_public_keys
   alloy_remote_write_url      = var.enable_alloy ? "${scaleway_cockpit_source.metrics[0].url}/api/v1/push" : ""
   alloy_remote_write_token    = var.enable_alloy ? scaleway_cockpit_token.alloy[0].secret_key : ""
+  alloy_loki_write_url        = var.enable_alloy ? "${scaleway_cockpit_source.logs[0].url}/loki/api/v1/push" : ""
+  alloy_loki_write_token      = var.enable_alloy ? scaleway_cockpit_token.alloy[0].secret_key : ""
   walg_env_vars = {
     AWS_ENDPOINT            = "https://s3.${var.region}.scw.cloud"
     AWS_ACCESS_KEY_ID       = scaleway_iam_api_key.walg.access_key

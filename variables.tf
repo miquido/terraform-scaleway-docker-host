@@ -88,7 +88,7 @@ variable "ip_allowlist" {
 
 variable "docker_compose_runner_image" {
   type    = string
-  default = "ghcr.io/miquido/gitlab-docker-compose-host:v1.0.2"
+  default = "ghcr.io/miquido/gitlab-docker-compose-host:v1.1.1"
 }
 
 variable "registry_url" {
@@ -121,6 +121,12 @@ variable "enable_alloy" {
 
 variable "cockpit_metrics_retention_days" {
   description = "Number of days to retain Traefik metrics in Scaleway Cockpit."
+  type        = number
+  default     = 30
+}
+
+variable "cockpit_logs_retention_days" {
+  description = "Number of days to retain Docker container logs in Scaleway Cockpit."
   type        = number
   default     = 30
 }
