@@ -1,3 +1,10 @@
+## [1.2.1](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.2.0...v1.2.1) (2026-08-20)
+
+
+### Bug Fixes
+
+* **cicd:** default validate-terraform ([a27ad23](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/a27ad23307c73c562de1af0e9c109cc2fd309962))
+
 # [1.2.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.1.0...v1.2.0) (2026-07-27)
 
 
