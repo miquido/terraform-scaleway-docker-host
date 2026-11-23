@@ -4,7 +4,7 @@ resource "random_password" "dynamic_user" {
 }
 
 module "docker_host" {
-  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=v1.4.1"
+  source = "git::https://github.com/miquido/terraform-docker-host.git?ref=v2.2.2"
 
   domain                      = var.domain
   acme_email                  = var.acme_email
@@ -12,14 +12,16 @@ module "docker_host" {
   dns_challenge_env           = var.dns_challenge_env
   oidc_jwks_url               = var.oidc_jwks_url
   oidc_audience               = var.oidc_audience
-  oidc_expected_subs          = join(",", var.oidc_expected_subs)
+  oidc_expected_subs          = var.oidc_expected_subs
   ip_allowlist                = var.ip_allowlist
   docker_compose_runner_image = var.docker_compose_runner_image
   passwd_hash                 = bcrypt(random_password.dynamic_user.result)
   registry_url                = var.registry_url
   registry_username           = var.registry_username
   registry_password           = var.registry_password
+  vm_user                     = var.vm_user
   block_device                = "/dev/sdb"
+  enable_autoheal             = var.enable_autoheal
   docker_prune_schedule       = var.docker_prune_schedule
   ssh_public_keys             = var.ssh_public_keys
   alloy_remote_write_url      = var.enable_alloy ? "${scaleway_cockpit_source.metrics[0].url}/api/v1/push" : ""
@@ -59,9 +61,15 @@ resource "scaleway_instance_security_group" "main" {
     port   = 443
   }
 
-  inbound_rule {
-    action = "accept"
-    port   = 5432
+  # Postgres is reached through Traefik's TLS-routed entrypoint. The default keeps the previous behaviour
+  # (open to everyone); restrict it with postgres_ingress_cidr_blocks, or [] to close the port.
+  dynamic "inbound_rule" {
+    for_each = var.postgres_ingress_cidr_blocks
+    content {
+      action   = "accept"
+      port     = 5432
+      ip_range = inbound_rule.value
+    }
   }
 }
 
@@ -93,12 +101,16 @@ resource "scaleway_instance_server" "main" {
 }
 
 resource "scaleway_block_volume" "data" {
-  iops       = var.data_volume_iops
-  name       = "${var.project}-${var.environment}-data"
-  size_in_gb = var.data_volume_size_in_gb
-  zone       = "${var.region}-1"
+  iops = var.data_volume_iops
+  name = "${var.project}-${var.environment}-data"
+  zone = "${var.region}-1"
+  # Create the data volume from a snapshot, e.g. to restore after losing the host or to clone a host for a test
+  # (`tofu apply -replace=module.docker_host...scaleway_block_volume.data`). The size then comes from the snapshot.
+  snapshot_id = var.data_volume_snapshot_id
+  size_in_gb  = var.data_volume_snapshot_id == null ? var.data_volume_size_in_gb : null
 
   lifecycle {
-    ignore_changes = [snapshot_id]
+    # Only used when the volume is (re)created; clearing it afterwards must not replace the volume again.
+    ignore_changes = [snapshot_id, size_in_gb]
   }
 }

@@ -2,6 +2,20 @@
 
 Provisions a Scaleway VM as a Docker host with Traefik, OIDC auth, WAL-G backups, and Grafana Alloy metrics
 
+## Upgrading from v1
+
+v2 is built on `terraform-docker-host` v2 (Ofelia from `netresearch`, which follows Docker events and scopes jobs per
+container, scheduled backups that work, stable paths, `pitr-marker` / `pitr-restore` on the host).
+
+- `vm_user` defaults to `dynamic`, so `/home/dynamic` (and `walg.env`, referenced by existing stacks) stays as it is.
+  New hosts can use `ubuntu`.
+- `oidc_expected_subs` is passed as a list (no code change on your side).
+- `docker_compose_runner_image` defaults to `v1.4.2`.
+- `postgres_ingress_cidr_blocks` makes the Postgres port restrictable (default: open, as before).
+- `data_volume_snapshot_id` creates the data volume from a snapshot (restore, or a test clone of a host).
+- The cloud-init of a running VM is not re-applied (`user_data` is in `ignore_changes`): the new core reaches an existing
+  host only when the VM is replaced (`tofu apply -replace=...scaleway_instance_server.main`); the data volume stays attached.
+
 ## Development
 
 ```bash
@@ -14,7 +28,7 @@ make lint   # lint terraform code
 
 ```hcl
 module "docker_host" {
-  source = "git@gitlab.miquido.com:miquido/terraform/scaleway-docker-host.git?ref=v1.0.0"
+  source = "git@gitlab.miquido.com:miquido/terraform/scaleway-docker-host.git?ref=v2.0.0"
 
   project         = "my-project"
   project_id      = var.scaleway_project_id
@@ -61,7 +75,7 @@ module "docker_host" {
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | v1.4.1 |
+| <a name="module_docker_host"></a> [docker\_host](#module\_docker\_host) | git::https://github.com/miquido/terraform-docker-host.git | v2.2.2 |
 
 ## Resources
 
@@ -89,12 +103,14 @@ module "docker_host" {
 | <a name="input_cockpit_metrics_retention_days"></a> [cockpit\_metrics\_retention\_days](#input\_cockpit\_metrics\_retention\_days) | Number of days to retain Traefik metrics in Scaleway Cockpit. | `number` | `30` | no |
 | <a name="input_data_volume_iops"></a> [data\_volume\_iops](#input\_data\_volume\_iops) | n/a | `number` | `5000` | no |
 | <a name="input_data_volume_size_in_gb"></a> [data\_volume\_size\_in\_gb](#input\_data\_volume\_size\_in\_gb) | n/a | `number` | `20` | no |
+| <a name="input_data_volume_snapshot_id"></a> [data\_volume\_snapshot\_id](#input\_data\_volume\_snapshot\_id) | Snapshot to create the data volume from. Only read when the volume is created (`tofu apply -replace=...scaleway_block_volume.data`); changing it on an existing volume does nothing. | `string` | `null` | no |
 | <a name="input_dns_challenge_env"></a> [dns\_challenge\_env](#input\_dns\_challenge\_env) | Environment variables required by the DNS challenge provider | `map(string)` | n/a | yes |
 | <a name="input_dns_challenge_provider"></a> [dns\_challenge\_provider](#input\_dns\_challenge\_provider) | Traefik ACME DNS challenge provider (e.g. route53, cloudflare) | `string` | `"route53"` | no |
-| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.1.1"` | no |
+| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.4.2"` | no |
 | <a name="input_docker_prune_schedule"></a> [docker\_prune\_schedule](#input\_docker\_prune\_schedule) | Cron schedule for Docker image pruning via Ofelia. Set to empty string to disable. | `string` | `"0 3 * * *"` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | Base domain for wildcard certificate and routing (e.g. dmc.miquido.dev) | `string` | n/a | yes |
 | <a name="input_enable_alloy"></a> [enable\_alloy](#input\_enable\_alloy) | Enable Grafana Alloy metrics collection to Scaleway Cockpit. | `bool` | `true` | no |
+| <a name="input_enable_autoheal"></a> [enable\_autoheal](#input\_enable\_autoheal) | Restart containers Docker reports as unhealthy (only those labelled autoheal=true). | `bool` | `true` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | `"DEV1-S"` | no |
 | <a name="input_ip_allowlist"></a> [ip\_allowlist](#input\_ip\_allowlist) | CIDR range allowed to access the docker-compose-runner endpoint | `string` | n/a | yes |
@@ -102,6 +118,7 @@ module "docker_host" {
 | <a name="input_oidc_expected_subs"></a> [oidc\_expected\_subs](#input\_oidc\_expected\_subs) | List of expected OIDC subjects for docker-compose-runner | `list(string)` | n/a | yes |
 | <a name="input_oidc_jwks_url"></a> [oidc\_jwks\_url](#input\_oidc\_jwks\_url) | JWKS URL for docker-compose-runner OIDC authentication | `string` | n/a | yes |
 | <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | n/a | `string` | n/a | yes |
+| <a name="input_postgres_ingress_cidr_blocks"></a> [postgres\_ingress\_cidr\_blocks](#input\_postgres\_ingress\_cidr\_blocks) | CIDR blocks allowed to reach port 5432 (Traefik's TLS-routed Postgres entrypoint). The default keeps the previous behaviour (open to everyone); [] closes the port. | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
 | <a name="input_project"></a> [project](#input\_project) | n/a | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | n/a | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | n/a | `string` | `"pl-waw"` | no |
@@ -111,6 +128,7 @@ module "docker_host" {
 | <a name="input_root_volume_size_in_gb"></a> [root\_volume\_size\_in\_gb](#input\_root\_volume\_size\_in\_gb) | n/a | `number` | `20` | no |
 | <a name="input_ssh_ip_range"></a> [ssh\_ip\_range](#input\_ssh\_ip\_range) | CIDR allowed SSH access | `string` | n/a | yes |
 | <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | List of SSH public keys added to the dynamic user's authorized\_keys on the VM. | `list(string)` | `[]` | no |
+| <a name="input_vm_user"></a> [vm\_user](#input\_vm\_user) | Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `dynamic` keeps the paths (/home/dynamic) that existing stacks reference; terraform-docker-host v2 would default to `ubuntu`. | `string` | `"dynamic"` | no |
 | <a name="input_walg_backup_retention_days"></a> [walg\_backup\_retention\_days](#input\_walg\_backup\_retention\_days) | Number of days to retain WAL-G backups in Object Storage before automatic deletion. | `number` | `30` | no |
 
 ## Outputs

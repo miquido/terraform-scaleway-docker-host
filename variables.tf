@@ -88,7 +88,7 @@ variable "ip_allowlist" {
 
 variable "docker_compose_runner_image" {
   type    = string
-  default = "ghcr.io/miquido/gitlab-docker-compose-host:v1.1.1"
+  default = "ghcr.io/miquido/gitlab-docker-compose-host:v1.4.2"
 }
 
 variable "registry_url" {
@@ -141,4 +141,28 @@ variable "ssh_public_keys" {
   description = "List of SSH public keys added to the dynamic user's authorized_keys on the VM."
   type        = list(string)
   default     = []
+}
+
+variable "vm_user" {
+  description = "Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `dynamic` keeps the paths (/home/dynamic) that existing stacks reference; terraform-docker-host v2 would default to `ubuntu`."
+  type        = string
+  default     = "dynamic"
+}
+
+variable "enable_autoheal" {
+  description = "Restart containers Docker reports as unhealthy (only those labelled autoheal=true)."
+  type        = bool
+  default     = true
+}
+
+variable "postgres_ingress_cidr_blocks" {
+  description = "CIDR blocks allowed to reach port 5432 (Traefik's TLS-routed Postgres entrypoint). The default keeps the previous behaviour (open to everyone); [] closes the port."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "data_volume_snapshot_id" {
+  description = "Snapshot to create the data volume from. Only read when the volume is created (`tofu apply -replace=...scaleway_block_volume.data`); changing it on an existing volume does nothing."
+  type        = string
+  default     = null
 }
