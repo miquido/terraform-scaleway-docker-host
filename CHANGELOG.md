@@ -1,3 +1,23 @@
+# [2.0.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.3.1...v2.0.0) (2026-11-23)
+
+
+* feat!: terraform-docker-host v2 (Ofelia fork, working scheduled backups), vm_user, snapshot restore ([b38cf73](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/b38cf7361bac5fc6f1017eec8b5a0a26589354fe))
+* feat!: vm_user defaults to ubuntu, optional /home/dynamic symlink for the transition ([dfae9f2](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/dfae9f296373ebe8ef09738940fa5b0e1f858b33))
+
+
+### BREAKING CHANGES
+
+* built on terraform-docker-host v2.2.2 (see previous commit); the login user is ubuntu
+(/home/ubuntu) unless vm_user is set. legacy_dynamic_home_symlink keeps /home/dynamic working.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* built on terraform-docker-host v2.2.2. A running host only gets the new cloud-init
+when its VM is replaced. vm_user defaults to dynamic to keep /home/dynamic; the compose runner image
+defaults to v1.4.2. New inputs: vm_user, enable_autoheal, postgres_ingress_cidr_blocks,
+data_volume_snapshot_id.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
 ## [1.2.1](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.2.0...v1.2.1) (2026-08-20)
 
 
