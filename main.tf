@@ -22,6 +22,7 @@ module "docker_host" {
   vm_user                     = var.vm_user
   block_device                = "/dev/sdb"
   enable_autoheal             = var.enable_autoheal
+  extra_runcmd                = var.legacy_dynamic_home_symlink && var.vm_user != "dynamic" ? ["ln -sfn /home/${var.vm_user} /home/dynamic"] : []
   docker_prune_schedule       = var.docker_prune_schedule
   ssh_public_keys             = var.ssh_public_keys
   alloy_remote_write_url      = var.enable_alloy ? "${scaleway_cockpit_source.metrics[0].url}/api/v1/push" : ""

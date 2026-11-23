@@ -144,9 +144,15 @@ variable "ssh_public_keys" {
 }
 
 variable "vm_user" {
-  description = "Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `dynamic` keeps the paths (/home/dynamic) that existing stacks reference; terraform-docker-host v2 would default to `ubuntu`."
+  description = "Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `ubuntu` matches the other docker-host wrappers; hosts built with v1 used `dynamic`."
   type        = string
-  default     = "dynamic"
+  default     = "ubuntu"
+}
+
+variable "legacy_dynamic_home_symlink" {
+  description = "Link /home/dynamic to the home of vm_user so stacks that still reference /home/dynamic/walg.env (the v1 layout) keep working while their compose files are moved to /home/<vm_user>. Ignored when vm_user is `dynamic`."
+  type        = bool
+  default     = true
 }
 
 variable "enable_autoheal" {

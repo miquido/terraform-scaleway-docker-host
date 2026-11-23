@@ -7,8 +7,9 @@ Provisions a Scaleway VM as a Docker host with Traefik, OIDC auth, WAL-G backups
 v2 is built on `terraform-docker-host` v2 (Ofelia from `netresearch`, which follows Docker events and scopes jobs per
 container, scheduled backups that work, stable paths, `pitr-marker` / `pitr-restore` on the host).
 
-- `vm_user` defaults to `dynamic`, so `/home/dynamic` (and `walg.env`, referenced by existing stacks) stays as it is.
-  New hosts can use `ubuntu`.
+- `vm_user` defaults to `ubuntu` (like the other docker-host wrappers); v1 hosts used `dynamic`. With
+  `legacy_dynamic_home_symlink` (default on) `/home/dynamic` is linked to the new home, so stacks that still reference
+  `/home/dynamic/walg.env` keep working until their compose files move to `/home/ubuntu/walg.env`.
 - `oidc_expected_subs` is passed as a list (no code change on your side).
 - `docker_compose_runner_image` defaults to `v1.4.2`.
 - `postgres_ingress_cidr_blocks` makes the Postgres port restrictable (default: open, as before).
@@ -114,6 +115,7 @@ module "docker_host" {
 | <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | `"DEV1-S"` | no |
 | <a name="input_ip_allowlist"></a> [ip\_allowlist](#input\_ip\_allowlist) | CIDR range allowed to access the docker-compose-runner endpoint | `string` | n/a | yes |
+| <a name="input_legacy_dynamic_home_symlink"></a> [legacy\_dynamic\_home\_symlink](#input\_legacy\_dynamic\_home\_symlink) | Link /home/dynamic to the home of vm\_user so stacks that still reference /home/dynamic/walg.env (the v1 layout) keep working while their compose files are moved to /home/<vm\_user>. Ignored when vm\_user is `dynamic`. | `bool` | `true` | no |
 | <a name="input_oidc_audience"></a> [oidc\_audience](#input\_oidc\_audience) | Expected OIDC audience for docker-compose-runner | `string` | n/a | yes |
 | <a name="input_oidc_expected_subs"></a> [oidc\_expected\_subs](#input\_oidc\_expected\_subs) | List of expected OIDC subjects for docker-compose-runner | `list(string)` | n/a | yes |
 | <a name="input_oidc_jwks_url"></a> [oidc\_jwks\_url](#input\_oidc\_jwks\_url) | JWKS URL for docker-compose-runner OIDC authentication | `string` | n/a | yes |
@@ -128,7 +130,7 @@ module "docker_host" {
 | <a name="input_root_volume_size_in_gb"></a> [root\_volume\_size\_in\_gb](#input\_root\_volume\_size\_in\_gb) | n/a | `number` | `20` | no |
 | <a name="input_ssh_ip_range"></a> [ssh\_ip\_range](#input\_ssh\_ip\_range) | CIDR allowed SSH access | `string` | n/a | yes |
 | <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | List of SSH public keys added to the dynamic user's authorized\_keys on the VM. | `list(string)` | `[]` | no |
-| <a name="input_vm_user"></a> [vm\_user](#input\_vm\_user) | Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `dynamic` keeps the paths (/home/dynamic) that existing stacks reference; terraform-docker-host v2 would default to `ubuntu`. | `string` | `"dynamic"` | no |
+| <a name="input_vm_user"></a> [vm\_user](#input\_vm\_user) | Login user on the VM; its home holds docker-compose.yml and the helper scripts, walg.env is linked into it. `ubuntu` matches the other docker-host wrappers; hosts built with v1 used `dynamic`. | `string` | `"ubuntu"` | no |
 | <a name="input_walg_backup_retention_days"></a> [walg\_backup\_retention\_days](#input\_walg\_backup\_retention\_days) | Number of days to retain WAL-G backups in Object Storage before automatic deletion. | `number` | `30` | no |
 
 ## Outputs
