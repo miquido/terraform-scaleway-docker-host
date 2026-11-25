@@ -1,3 +1,10 @@
+# [2.1.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v2.0.0...v2.1.0) (2026-11-25)
+
+
+### Features
+
+* terraform-docker-host v2.4.0 (Docker log rotation and a curated Traefik metric set by default) ([ec92631](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/ec92631c80a0c112c26319cc36f7caa40207eb6a))
+
 # [2.0.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v1.3.1...v2.0.0) (2026-11-23)
 
 
