@@ -1,3 +1,10 @@
+## [2.1.1](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v2.1.0...v2.1.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* docker-compose-runner v1.5.0 by default (rolls a failed deploy back to the last good one) ([913c720](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/commit/913c720e27f6fd2c42057bc43cf13f07c57a1210))
+
 # [2.1.0](https://gitlab.miquido.com/miquido/terraform/scaleway-docker-host/compare/v2.0.0...v2.1.0) (2026-11-25)
 
 
