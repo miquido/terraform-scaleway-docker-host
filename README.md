@@ -107,7 +107,7 @@ module "docker_host" {
 | <a name="input_data_volume_snapshot_id"></a> [data\_volume\_snapshot\_id](#input\_data\_volume\_snapshot\_id) | Snapshot to create the data volume from. Only read when the volume is created (`tofu apply -replace=...scaleway_block_volume.data`); changing it on an existing volume does nothing. | `string` | `null` | no |
 | <a name="input_dns_challenge_env"></a> [dns\_challenge\_env](#input\_dns\_challenge\_env) | Environment variables required by the DNS challenge provider | `map(string)` | n/a | yes |
 | <a name="input_dns_challenge_provider"></a> [dns\_challenge\_provider](#input\_dns\_challenge\_provider) | Traefik ACME DNS challenge provider (e.g. route53, cloudflare) | `string` | `"route53"` | no |
-| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.4.2"` | no |
+| <a name="input_docker_compose_runner_image"></a> [docker\_compose\_runner\_image](#input\_docker\_compose\_runner\_image) | n/a | `string` | `"ghcr.io/miquido/gitlab-docker-compose-host:v1.5.0"` | no |
 | <a name="input_docker_prune_schedule"></a> [docker\_prune\_schedule](#input\_docker\_prune\_schedule) | Cron schedule for Docker image pruning via Ofelia. Set to empty string to disable. | `string` | `"0 3 * * *"` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | Base domain for wildcard certificate and routing (e.g. dmc.miquido.dev) | `string` | n/a | yes |
 | <a name="input_enable_alloy"></a> [enable\_alloy](#input\_enable\_alloy) | Enable Grafana Alloy metrics collection to Scaleway Cockpit. | `bool` | `true` | no |
